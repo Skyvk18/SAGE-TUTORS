@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SAGE provides personalized Math, English, History, and Science tutoring for students in Grades 1–9." />
+  <meta name="theme-color" content="#2f3826" />
+  <title>SAGE | Grades 1–9</title>
+
+  <!-- EDIT: Change fonts here if you want a different look. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       EASY EDIT AREA — CHANGE COLORS HERE
+       ========================================================= */
+    :root {
+      --olive-950: #22291d;
+      --olive-900: #2f3826;
+      --olive-800: #3d4932;
+      --olive-700: #566449;
+      --olive-600: #6d7c5c;
+      --olive-300: #b9c4a9;
+      --olive-100: #edf0e8;
+      --cream: #f7f5ef;
+      --warm-white: #fcfbf8;
+      --grey-900: #262824;
+      --grey-700: #53564f;
+      --grey-500: #7d8178;
+      --grey-300: #cfd1cb;
+      --grey-200: #e5e6e1;
+      --grey-100: #f1f2ee;
+      --white: #ffffff;
+      --shadow: 0 24px 70px rgba(34, 41, 29, .12);
+      --shadow-soft: 0 14px 38px rgba(34, 41, 29, .08);
+      --radius-lg: 30px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+    body {
+      margin: 0;
+      color: var(--grey-900);
+      background: var(--warm-white);
+      font-family: "DM Sans", system-ui, sans-serif;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    body.menu-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    .container { width: min(1180px, calc(100% - 40px)); margin: auto; }
+
+    /* NAVIGATION */
+    .header {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 1000;
+      transition: .25s ease;
+    }
+    .header.scrolled {
+      background: rgba(252, 251, 248, .93);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(207,209,203,.7);
+      box-shadow: 0 7px 26px rgba(34,41,29,.06);
+    }
+    .nav {
+      min-height: 84px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 28px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--cream);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      position: relative;
+      z-index: 4;
+    }
+    .header.scrolled .brand { color: var(--olive-950); }
+    .brand-logo {
+      width: 118px;
+      height: 58px;
+      object-fit: contain;
+      display: block;
+      border-radius: 8px;
+    }
+    .header.scrolled .brand-logo {
+      background: var(--olive-950);
+      padding: 3px 7px;
+    }
+    .brand small { display:block; font-size:10px; letter-spacing:.14em; text-transform:uppercase; opacity:.65; margin-top:-3px; }
+    .nav-links { display: flex; align-items: center; gap: 29px; }
+    .nav-links a { color: rgba(247,245,239,.78); font-size: 14px; font-weight: 600; transition:.2s; }
+    .header.scrolled .nav-links a { color: var(--grey-700); }
+    .nav-links a:hover { color: white; }
+    .header.scrolled .nav-links a:hover { color: var(--olive-700); }
+    .nav-cta {
+      padding: 10px 17px;
+      border-radius: 999px;
+      background: var(--cream);
+      color: var(--olive-950) !important;
+    }
+    .header.scrolled .nav-cta { background: var(--olive-900); color: white !important; }
+    .menu-btn {
+      display:none;
+      width:44px; height:44px;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.08);
+      color:white;
+      cursor:pointer;
+      position:relative;
+      z-index:4;
+    }
+    .header.scrolled .menu-btn { color: var(--olive-950); border-color: var(--grey-300); background:white; }
+
+    /* HERO */
+    .hero {
+      min-height: 820px;
+      padding: 165px 0 100px;
+      color: white;
+      background:
+        radial-gradient(circle at 84% 22%, rgba(185,196,169,.13), transparent 24%),
+        linear-gradient(135deg, #20261b 0%, #303a27 48%, #444f39 100%);
+      position: relative;
+      overflow:hidden;
+    }
+    .hero:before {
+      content:"";
+      position:absolute;
+      width:520px; height:520px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:50%;
+      right:-150px; top:110px;
+    }
+    .hero:after {
+      content:"";
+      position:absolute;
+      width:720px; height:720px;
+      border:1px solid rgba(255,255,255,.045);
+      border-radius:50%;
+      right:-250px; top:10px;
+    }
+    .hero-grid {
+      display:grid;
+      grid-template-columns:1.12fr .88fr;
+      gap:80px;
+      align-items:center;
+      position:relative;
+      z-index:2;
+    }
+    .eyebrow {
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:11px;
+      font-weight:700;
+      color:#dfe5d7;
+      margin-bottom:22px;
+    }
+    .eyebrow:before { content:""; width:34px; height:1px; background:#c7d0ba; }
+    .hero h1 {
+      font-family:"Playfair Display", serif;
+      font-size:clamp(52px, 6.4vw, 84px);
+      line-height:.98;
+      letter-spacing:-.045em;
+      margin:0;
+      font-weight:600;
+      max-width:760px;
+    }
+    .hero h1 em { color:#c7d0ba; font-style:italic; font-weight:600; }
+    .hero-copy { color:#d1d6cd; font-size:18px; max-width:650px; margin:27px 0 32px; }
+    .hero-actions { display:flex; gap:13px; flex-wrap:wrap; }
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:53px;
+      padding:0 22px;
+      border-radius:999px;
+      border:none;
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+    .btn:hover { transform:translateY(-2px); }
+    .btn-light { background:var(--cream); color:var(--olive-950); box-shadow:0 15px 34px rgba(0,0,0,.15); }
+    .btn-outline { background:transparent; border:1px solid rgba(255,255,255,.24); color:white; }
+    .hero-meta { display:flex; gap:24px; flex-wrap:wrap; margin-top:36px; color:#bec6b8; font-size:13px; }
+    .hero-meta strong { color:white; }
+
+    .hero-card {
+      padding:28px;
+      border-radius:32px;
+      border:1px solid rgba(255,255,255,.13);
+      background:rgba(255,255,255,.075);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      box-shadow:0 32px 90px rgba(0,0,0,.22);
+    }
+    .hero-card-top { display:flex; justify-content:space-between; align-items:flex-start; gap:20px; padding-bottom:22px; border-bottom:1px solid rgba(255,255,255,.11); }
+    .hero-card-top small { color:#bfc7b8; text-transform:uppercase; letter-spacing:.1em; font-size:10px; }
+    .hero-card-top h3 { margin:4px 0 0; font-family:"Playfair Display",serif; font-size:27px; }
+    .grade-badge { padding:8px 12px; border-radius:999px; background:var(--cream); color:var(--olive-900); font-size:12px; font-weight:700; white-space:nowrap; }
+    .subject-list { display:grid; gap:11px; margin-top:19px; }
+    .subject-line { display:flex; align-items:center; justify-content:space-between; gap:15px; padding:15px 16px; border-radius:15px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.08); }
+    .subject-line span { color:#c7cec1; font-size:13px; }
+    .subject-line strong { font-size:14px; }
+
+    /* SECTIONS */
+    .section { padding:105px 0; }
+    .section-soft { background:var(--grey-100); }
+    .kicker { color:var(--olive-700); text-transform:uppercase; letter-spacing:.15em; font-size:11px; font-weight:800; margin-bottom:14px; }
+    .section-title { font-family:"Playfair Display",serif; font-size:clamp(38px,4.5vw,58px); line-height:1.05; letter-spacing:-.035em; margin:0; max-width:780px; font-weight:600; color:var(--olive-950); }
+    .section-lead { color:var(--grey-700); max-width:720px; font-size:17px; margin:20px 0 0; }
+
+    /* STATS */
+    .stats { margin-top:-48px; position:relative; z-index:5; }
+    .stats-shell { background:var(--cream); border:1px solid var(--grey-200); border-radius:24px; padding:27px 30px; display:grid; grid-template-columns:repeat(4,1fr); box-shadow:var(--shadow); }
+    .stat { padding:5px 24px; border-right:1px solid var(--grey-200); }
+    .stat:last-child { border-right:0; }
+    .stat strong { display:block; font-family:"Playfair Display",serif; color:var(--olive-900); font-size:29px; line-height:1.1; }
+    .stat span { color:var(--grey-500); font-size:12px; }
+
+    /* SUBJECTS */
+    .subjects-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:42px; }
+    .subject-card { background:white; border:1px solid var(--grey-200); border-radius:24px; padding:28px; min-height:265px; transition:.25s; position:relative; overflow:hidden; }
+    .subject-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-soft); border-color:var(--olive-300); }
+    .subject-number { color:var(--olive-600); font-size:11px; letter-spacing:.13em; font-weight:800; }
+    .subject-card h3 { font-family:"Playfair Display",serif; font-size:29px; margin:30px 0 10px; color:var(--olive-950); }
+    .subject-card p { color:var(--grey-700); font-size:14px; margin:0; }
+    .subject-card .arrow { position:absolute; bottom:24px; right:25px; width:36px; height:36px; border-radius:50%; display:grid; place-items:center; background:var(--olive-100); color:var(--olive-800); }
+
+
+    /* PRICING */
+    .pricing-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:42px; }
+    .price-card { border-radius:28px; padding:32px; position:relative; transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease; overflow:hidden; min-height:360px; display:flex; flex-direction:column; }
+    .price-card:hover { transform:translateY(-5px); box-shadow:0 24px 55px rgba(31,35,28,.13); }
+    .price-card.light { background:#f2f0e9; border:1px solid #d9d7cf; color:var(--olive-950); }
+    .price-card.olive { background:#59634c; border:1px solid #59634c; color:white; }
+    .price-card.charcoal { background:#2f332e; border:1px solid #2f332e; color:white; }
+    .price-card.stone { background:#d8d7d2; border:1px solid #c7c6c0; color:#242823; }
+    .price-card::before { content:""; position:absolute; inset:0 auto 0 0; width:4px; background:rgba(255,255,255,.24); }
+    .price-card.light::before, .price-card.stone::before { background:var(--olive-700); }
+    .price-label { display:inline-flex; align-self:flex-start; padding:7px 10px; border-radius:999px; font-size:10px; letter-spacing:.16em; text-transform:uppercase; font-weight:800; margin-bottom:22px; }
+    .light .price-label, .stone .price-label { color:var(--olive-800); background:rgba(91,105,75,.10); border:1px solid rgba(91,105,75,.16); }
+    .olive .price-label, .charcoal .price-label { color:#f1f3ed; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.14); }
+    .price-card h3 { font-family:"Playfair Display",serif; font-size:28px; line-height:1.08; margin:0 0 19px; }
+    .price { font-family:"Playfair Display",serif; font-size:47px; font-weight:600; letter-spacing:-.03em; line-height:1; margin:0 0 19px; }
+    .price span { display:block; font-family:inherit; font-size:12px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; margin-top:8px; opacity:.65; }
+    .price-card p { font-size:14px; line-height:1.65; margin:0 0 26px; opacity:.78; }
+    .price-card .btn { margin-top:auto; width:100%; justify-content:center; min-height:50px; border-radius:14px; font-size:12px; letter-spacing:.04em; text-transform:uppercase; font-weight:800; }
+    .price-card.light .btn, .price-card.stone .btn { background:var(--olive-900); color:white; }
+    .price-card.olive .btn { background:#f4f2eb; color:#38412f; }
+    .price-card.charcoal .btn { background:#7a866a; color:white; }
+    .pricing-note { margin-top:24px; color:var(--grey-500); font-size:12px; letter-spacing:.01em; }
+
+    /* WHY */
+    .why-grid { display:grid; grid-template-columns:.9fr 1.1fr; gap:80px; align-items:center; }
+    .quote-card { background:var(--olive-900); color:white; border-radius:32px; padding:45px; min-height:440px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:var(--shadow); position:relative; overflow:hidden; }
+    .quote-card:after { content:"B"; position:absolute; right:-30px; bottom:-95px; font-family:"Playfair Display",serif; font-size:270px; color:rgba(255,255,255,.035); }
+    .quote-card .quote { font-family:"Playfair Display",serif; font-size:34px; line-height:1.2; margin:0; max-width:500px; position:relative; z-index:2; }
+    .quote-card small { color:#bec6b8; position:relative; z-index:2; }
+    .features { display:grid; gap:17px; margin-top:35px; }
+    .feature { display:grid; grid-template-columns:46px 1fr; gap:15px; align-items:start; padding:17px 0; border-bottom:1px solid var(--grey-200); }
+    .feature:last-child { border-bottom:0; }
+    .feature-icon { width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--olive-100);color:var(--olive-800);font-weight:800; }
+    .feature h3 { margin:1px 0 4px; font-size:16px; }
+    .feature p { margin:0; color:var(--grey-500); font-size:14px; }
+
+    /* TUTORS */
+    .tutor-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:42px; }
+    .tutor-card { background:var(--cream); border:1px solid var(--grey-200); border-radius:26px; padding:30px; transition:.25s; }
+    .tutor-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-soft); }
+    .avatar { width:66px;height:66px;border-radius:50%;background:var(--olive-900);color:white;display:grid;place-items:center;font-family:"Playfair Display",serif;font-size:22px;margin-bottom:23px; }
+    .tutor-card h3 { margin:0; font-size:20px; color:var(--olive-950); }
+    .tutor-card .role { color:var(--olive-700); font-size:12px; text-transform:uppercase; letter-spacing:.1em; font-weight:800; margin:5px 0 12px; }
+    .tutor-card p { color:var(--grey-700); font-size:14px; margin:0; }
+
+    /* PROCESS */
+    .process-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:40px; }
+    .step { padding:30px; border-top:2px solid var(--olive-300); background:white; }
+    .step-num { font-family:"Playfair Display",serif; color:var(--olive-600); font-size:34px; }
+    .step h3 { margin:20px 0 7px; font-size:17px; }
+    .step p { margin:0; color:var(--grey-500); font-size:14px; }
+
+    /* FORM */
+    .form-section { background:var(--olive-950); color:white; }
+    .form-section .kicker { color:#c4cdb7; }
+    .form-section .section-title { color:white; }
+    .form-section .section-lead { color:#bcc3b7; }
+    .form-wrap { display:grid; grid-template-columns:.78fr 1.22fr; gap:65px; align-items:start; }
+    .form-aside { position:sticky; top:120px; }
+    .form-note { margin-top:34px; border-top:1px solid rgba(255,255,255,.12); padding-top:24px; color:#bcc3b7; font-size:13px; }
+    .form-card { background:var(--cream); color:var(--grey-900); border-radius:30px; padding:34px; box-shadow:0 28px 80px rgba(0,0,0,.2); }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:17px; }
+    .field.full { grid-column:1 / -1; }
+    label { display:block; font-size:12px; font-weight:800; color:var(--grey-700); margin:0 0 7px 3px; }
+    input, select, textarea { width:100%; border:1px solid var(--grey-300); background:white; color:var(--grey-900); padding:14px 15px; border-radius:13px; outline:none; transition:.2s; }
+    input:focus, select:focus, textarea:focus { border-color:var(--olive-600); box-shadow:0 0 0 4px rgba(109,124,92,.12); }
+    textarea { min-height:125px; resize:vertical; }
+    .submit-btn { width:100%; margin-top:18px; background:var(--olive-900); color:white; min-height:55px; }
+    .tiny { margin:12px 0 0; text-align:center; color:var(--grey-500); font-size:11px; }
+
+    /* CONTACT */
+    .contact-grid { display:grid; grid-template-columns:.85fr 1.15fr; gap:70px; align-items:start; }
+    .contact-card { background:white; border:1px solid var(--grey-200); border-radius:28px; padding:32px; box-shadow:var(--shadow-soft); }
+    .contact-detail { padding:18px 0; border-bottom:1px solid var(--grey-200); }
+    .contact-detail:last-child { border-bottom:0; }
+    .contact-detail small { display:block; color:var(--grey-500); text-transform:uppercase; letter-spacing:.1em; font-size:10px; margin-bottom:4px; }
+    .contact-detail strong { color:var(--olive-900); }
+
+    /* FOOTER */
+    footer { background:#1a1f17; color:#aeb5a8; padding:38px 0; }
+    .footer-inner { display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+    .footer-brand { color:white; font-family:"Playfair Display",serif; font-size:20px; }
+    footer p { margin:0; font-size:12px; }
+
+    /* REVEAL */
+    .reveal { opacity:0; transform:translateY(20px); transition:opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity:1; transform:none; }
+
+    @media (max-width: 950px) {
+      .hero-grid, .why-grid, .form-wrap, .contact-grid { grid-template-columns:1fr; gap:45px; }
+      .hero { min-height:auto; }
+      .subjects-grid { grid-template-columns:repeat(2,1fr); }
+      .tutor-grid, .process-grid { grid-template-columns:1fr; }
+      .form-aside { position:static; }
+      .stats-shell { grid-template-columns:repeat(2,1fr); }
+      .stat:nth-child(2) { border-right:0; }
+      .stat:nth-child(-n+2) { padding-bottom:20px; margin-bottom:15px; border-bottom:1px solid var(--grey-200); }
+    }
+
+    @media (max-width: 760px) {
+      .container { width:min(100% - 28px, 1180px); }
+      .menu-btn { display:block; }
+      .nav-links {
+        position:fixed;
+        inset:0;
+        background:var(--olive-950);
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:28px;
+        opacity:0;
+        visibility:hidden;
+        transform:translateY(-12px);
+        transition:.25s;
+      }
+      .nav-links.open { opacity:1; visibility:visible; transform:none; }
+      .nav-links a, .header.scrolled .nav-links a { color:white; font-size:20px; }
+      .hero { padding:135px 0 85px; }
+      .hero h1 { font-size:clamp(46px,14vw,65px); }
+      .subjects-grid, .stats-shell, .form-grid { grid-template-columns:1fr; }
+      .stat { border-right:0; border-bottom:1px solid var(--grey-200); padding:14px 5px; margin:0 !important; }
+      .stat:last-child { border-bottom:0; }
+      .section { padding:78px 0; }
+      .form-card, .quote-card { padding:25px; }
+      .field.full { grid-column:auto; }
+      .stats { margin-top:-30px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- =========================================================
+       EDIT BUSINESS NAME HERE
+       ========================================================= -->
+  <header class="header" id="header">
+    <div class="container nav">
+      <a href="#home" class="brand" aria-label="SAGE Tutoring home">
+        <img src="sage-logo.png" alt="SAGE Tutoring logo" class="brand-logo" />
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#subjects">Subjects</a>
+        <a href="#about">Why Us</a>
+        <a href="#tutors">Tutors</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+        <a href="#register" class="nav-cta">Register</a>
+      </nav>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Personalized tutoring · Grades 1–9</div>
+          <h1>Striving for Excellence<br><em>in Every Subject.</em></h1>
+          <p class="hero-copy">Thoughtful, student-focused tutoring in Math, English, History, and Science. We help students understand difficult concepts, strengthen core skills, and feel more confident in the classroom.</p>
+          <div class="hero-actions">
+            <a class="btn btn-light" href="#register">Register for Tutoring →</a>
+            <a class="btn btn-outline" href="#subjects">Explore Subjects</a>
+          </div>
+          <div class="hero-meta">
+            <span><strong>Grades 1–9</strong> supported</span>
+            <span><strong>4 core subjects</strong></span>
+            <span><strong>Personalized</strong> learning support</span>
+          </div>
+        </div>
+
+        <div class="hero-card reveal">
+          <div class="hero-card-top">
+            <div><small>Currently tutoring</small><h3>Core Academic Subjects</h3></div>
+            <div class="grade-badge">Grades 1–9</div>
+          </div>
+          <div class="subject-list">
+            <div class="subject-line"><strong>Mathematics</strong><span>Foundations → Algebra</span></div>
+            <div class="subject-line"><strong>English</strong><span>Reading · Writing · Grammar</span></div>
+            <div class="subject-line"><strong>Science</strong><span>General · Life · Physical</span></div>
+            <div class="subject-line"><strong>History</strong><span>Social Studies · U.S. · World</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container stats">
+      <div class="stats-shell reveal">
+        <div class="stat"><strong>1–9</strong><span>Grade levels</span></div>
+        <div class="stat"><strong>4</strong><span>Core subjects</span></div>
+        <div class="stat"><strong>3</strong><span>Founders & tutors</span></div>
+        <div class="stat"><strong>1:1</strong><span>Student-focused support</span></div>
+      </div>
+    </div>
+
+    <section class="section" id="subjects">
+      <div class="container">
+        <div class="kicker">What we teach</div>
+        <h2 class="section-title">Here are our subjects:</h2>
+        <p class="section-lead">Subjects designed to match New York State Education core curriculum Standards.</p>
+
+        <div class="subjects-grid">
+          <article class="subject-card reveal"><div class="subject-number">01</div><h3>Math</h3><p>Arithmetic, fractions, decimals, ratios, geometry, pre-algebra, algebra foundations, homework help, and test preparation.</p><div class="arrow">↗</div></article>
+          <article class="subject-card reveal"><div class="subject-number">02</div><h3>English</h3><p>Reading comprehension, vocabulary, grammar, essay writing, paragraph structure, analysis, and stronger communication skills.</p><div class="arrow">↗</div></article>
+          <article class="subject-card reveal"><div class="subject-number">03</div><h3>Science</h3><p>General science, biology foundations, physical science, earth science concepts, study support, and scientific reasoning.</p><div class="arrow">↗</div></article>
+          <article class="subject-card reveal"><div class="subject-number">04</div><h3>History</h3><p>Social studies, geography, U.S. history, world history, source analysis, writing support, and test preparation.</p><div class="arrow">↗</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="about">
+      <div class="container why-grid">
+        <div class="quote-card reveal">
+          <p class="quote">“Good tutoring does more than finish homework. It helps a student understand why the answer makes sense.”</p>
+          <small>Our approach to learning</small>
+        </div>
+        <div>
+          <div class="kicker">Why SAGE</div>
+          <h2 class="section-title">Clear explanations. Patient guidance. Real progress.</h2>
+          <div class="features">
+            <div class="feature reveal"><div class="feature-icon">01</div><div><h3>Personalized lessons</h3><p>Sessions focus on the exact concepts and skills each student needs to improve.</p></div></div>
+            <div class="feature reveal"><div class="feature-icon">02</div><div><h3>Grades 1 through 9</h3><p>Support ranges from elementary fundamentals to more advanced middle school and early high school coursework.</p></div></div>
+            <div class="feature reveal"><div class="feature-icon">03</div><div><h3>Confidence first</h3><p>We create a comfortable environment where students can ask questions and learn without pressure.</p></div></div>
+            <div class="feature reveal"><div class="feature-icon">04</div><div><h3>Flexible academic support</h3><p>Use tutoring for homework, difficult units, review, test preparation, or long-term skill building.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tutors">
+      <div class="container">
+        <div class="kicker">Meet the team</div>
+        <h2 class="section-title">Founded by students who understand how students learn.</h2>
+        <p class="section-lead">SAGE is led by three founders committed to making academic help clear, approachable, and useful.</p>
+
+        <!-- EDIT: Change tutor descriptions below anytime. -->
+        <div class="tutor-grid">
+          <article class="tutor-card reveal"><div class="avatar">AD</div><h3>Aniket Dixit</h3><div class="role">Founder · Tutor</div><p>Focused on helping students break down difficult material into manageable steps and build confidence through practice.</p></article>
+          <article class="tutor-card reveal"><div class="avatar">SB</div><h3>Seeraj Bellamkonda</h3><div class="role">Founder · Tutor</div><p>Committed to patient, organized instruction that helps students strengthen fundamentals and improve their classroom performance.</p></article>
+          <article class="tutor-card reveal"><div class="avatar">AK</div><h3>Amartya Kamaraju</h3><div class="role">Founder · Tutor</div><p>Works with students to understand concepts clearly, develop stronger study habits, and approach schoolwork with greater confidence.</p></article>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section section-soft" id="pricing">
+      <div class="container">
+        <div class="kicker">Simple pricing</div>
+        <h2 class="section-title">Choose the tutoring format that fits best.</h2>
+        <p class="section-lead">Flexible online and in-person options are available for students in Grades 1–9.</p>
+
+        <div class="pricing-grid">
+          <article class="price-card light reveal">
+            <div class="price-label">Online · Group</div>
+            <h3>Online Group Tutoring</h3>
+            <div class="price">$24.99 <span>per session</span></div>
+            <p>Focused small-group instruction in a convenient online setting.</p>
+            <a class="btn" href="#register">Select Plan</a>
+          </article>
+
+          <article class="price-card olive reveal">
+            <div class="price-label">Online · Private</div>
+            <h3>Online Private Tutoring</h3>
+            <div class="price">$44.99 <span>per session</span></div>
+            <p>Individual online support shaped around the student's goals, pace, and coursework.</p>
+            <a class="btn" href="#register">Select Plan</a>
+          </article>
+
+          <article class="price-card stone reveal">
+            <div class="price-label">In Person · Group</div>
+            <h3>In-Person Group Tutoring</h3>
+            <div class="price">$39.99 <span>per session</span></div>
+            <p>Collaborative face-to-face learning with direct instruction and guided practice.</p>
+            <a class="btn" href="#register">Select Plan</a>
+          </article>
+
+          <article class="price-card charcoal reveal">
+            <div class="price-label">In Person · Private</div>
+            <h3>In-Person Private Tutoring</h3>
+            <div class="price">$59.99 <span>per session</span></div>
+            <p>Dedicated one-on-one instruction with personalized academic support.</p>
+            <a class="btn" href="#register">Select Plan</a>
+          </article>
+        </div>
+        <p class="pricing-note">Pricing shown is per tutoring session. Availability may vary by subject, grade level, and location.</p>
+      </div>
+    </section>
+
+    <section class="section section-soft">
+      <div class="container">
+        <div class="kicker">How it works</div>
+        <h2 class="section-title">Getting started is simple.</h2>
+        <div class="process-grid">
+          <div class="step reveal"><div class="step-num">01</div><h3>Complete the registration form</h3><p>Tell us the student's grade, subject, learning needs, and preferred schedule.</p></div>
+          <div class="step reveal"><div class="step-num">02</div><h3>We review the request</h3><p>We use the information you provide to understand what kind of tutoring support will be most helpful.</p></div>
+          <div class="step reveal"><div class="step-num">03</div><h3>We contact you</h3><p>We follow up using your contact information to discuss availability and the next steps for tutoring.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section form-section" id="register">
+      <div class="container form-wrap">
+        <div class="form-aside">
+          <div class="kicker">Registration</div>
+          <h2 class="section-title">Tell us how we can help your student.</h2>
+          <p class="section-lead">Complete the form and your information will be sent to our tutoring team.</p>
+          <p class="form-note">We currently accept students in <strong>Grades 1–9</strong> for Math, English, Science, and History. You can use the notes field to tell us about a specific class, assignment, test, or learning goal.</p>
+        </div>
+
+        <!-- FormSubmit sends submissions to the email below. -->
+        <form class="form-card reveal" action="https://formsubmit.co/aniketdixit2010@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="New SAGE Registration">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="text" name="_honey" style="display:none">
+
+          <div class="form-grid">
+            <div class="field"><label for="student">Student Name *</label><input id="student" name="Student Name" type="text" required placeholder="Student's full name"></div>
+            <div class="field"><label for="parent">Parent / Guardian Name *</label><input id="parent" name="Parent Guardian Name" type="text" required placeholder="Parent or guardian"></div>
+            <div class="field"><label for="email">Email *</label><input id="email" name="Email" type="email" required placeholder="name@example.com"></div>
+            <div class="field"><label for="phone">Phone Number *</label><input id="phone" name="Phone" type="tel" required placeholder="(555) 555-5555"></div>
+            <div class="field"><label for="grade">Student Grade *</label>
+              <select id="grade" name="Student Grade" required>
+                <option value="" disabled selected>Select grade</option>
+                <option>1st Grade</option><option>2nd Grade</option><option>3rd Grade</option><option>4th Grade</option><option>5th Grade</option><option>6th Grade</option><option>7th Grade</option><option>8th Grade</option><option>9th Grade</option>
+              </select>
+            </div>
+            <div class="field"><label for="subject">Subject *</label>
+              <select id="subject" name="Subject" required>
+                <option value="" disabled selected>Select subject</option><option>Math</option><option>English</option><option>Science</option><option>History</option><option>Multiple Subjects</option>
+              </select>
+            </div>
+            <div class="field"><label for="format">Tutoring Option</label><select id="format" name="Tutoring Option"><option>Online Group — $24.99/session</option><option>Online Private — $44.99/session</option><option>In-Person Group — $39.99/session</option><option>In-Person Private — $59.99/session</option><option>No Preference</option></select></div>
+            <div class="field"><label for="schedule">Preferred Schedule</label><input id="schedule" name="Preferred Schedule" type="text" placeholder="Example: Weekdays after 5 PM"></div>
+            <div class="field full"><label for="needs">What would you like help with? *</label><textarea id="needs" name="Tutoring Needs" required placeholder="Tell us about the class, topics, assignments, test preparation, or skills the student wants to improve..."></textarea></div>
+          </div>
+          <button class="btn submit-btn" type="submit">Submit Registration →</button>
+          <p class="tiny">Your information is sent securely through FormSubmit to aniketdixit2010@gmail.com.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container contact-grid">
+        <div>
+          <div class="kicker">Contact us</div>
+          <h2 class="section-title">Have a question before registering?</h2>
+          <p class="section-lead">Send us a message about grade levels, subjects, scheduling, availability, or anything else.</p>
+          <div class="contact-card reveal" style="margin-top:32px;">
+            <div class="contact-detail"><small>Email</small><strong>aniketdixit2010@gmail.com</strong></div>
+            <div class="contact-detail"><small>Grade Levels</small><strong>1st Grade – 9th Grade</strong></div>
+            <div class="contact-detail"><small>Subjects</small><strong>Math · English · Science · History</strong></div>
+          </div>
+        </div>
+
+        <form class="form-card reveal" action="https://formsubmit.co/aniketdixit2010@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="New SAGE Contact Message">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="text" name="_honey" style="display:none">
+          <div class="form-grid">
+            <div class="field"><label for="contactName">Name *</label><input id="contactName" name="Name" type="text" required placeholder="Your name"></div>
+            <div class="field"><label for="contactEmail">Email *</label><input id="contactEmail" name="Email" type="email" required placeholder="name@example.com"></div>
+            <div class="field full"><label for="contactSubject">Subject</label><input id="contactSubject" name="Message Subject" type="text" placeholder="What can we help with?"></div>
+            <div class="field full"><label for="message">Message *</label><textarea id="message" name="Message" required placeholder="Write your message here..."></textarea></div>
+          </div>
+          <button class="btn submit-btn" type="submit">Send Message →</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-brand">SAGE</div>
+      <p>Grades 1–9 · Math · English · Science · History</p>
+      <p>© <span id="year"></span> SAGE</p>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('header');
+    const navLinks = document.getElementById('navLinks');
+    const menuBtn = document.getElementById('menuBtn');
+
+    function updateHeader(){ header.classList.toggle('scrolled', window.scrollY > 30); }
+    updateHeader();
+    window.addEventListener('scroll', updateHeader);
+
+    menuBtn.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      document.body.classList.toggle('menu-open', open);
+      menuBtn.textContent = open ? '✕' : '☰';
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      document.body.classList.remove('menu-open');
+      menuBtn.textContent = '☰';
+    }));
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
