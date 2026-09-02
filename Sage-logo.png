@@ -1,0 +1,18 @@
+<style>
+.brand-logo {
+    width: 118px;
+    height: 58px;
+    object-fit: contain;
+    display: block;
+}
+
+/* White logo while navbar is over dark background */
+.header:not(.scrolled) .brand-logo {
+    filter: brightness(0) invert(1);
+}
+
+/* Green/original logo after scrolling */
+.header.scrolled .brand-logo {
+    filter: none;
+}
+</style>
